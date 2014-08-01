@@ -1,0 +1,19 @@
+2014-08-01 11:33:30,006 - [<init>](SimpleWorkflow:44) - [WF] 1. Load workflow's config from source conf/workflow-config.xml
+2014-08-01 11:33:30,011 - [<init>](SimpleWorkflow:48) - [WF] 2. Initial game's messages
+2014-08-01 11:33:30,011 - [initModeling](MessageFactory:58) - [MF] From file = conf/message-config.xml
+2014-08-01 11:33:30,738 - [<init>](SimpleWorkflow:54) - [WF] 3. Generate Business's Properties from com.tv.xeeng.base.business.SimpleBusinessPropertiesFactory
+2014-08-01 11:33:30,738 - [<init>](SimpleWorkflow:56) - [WF] 4. Start database connection
+2014-08-01 11:33:30,740 - [startDB](SimpleWorkflow:75) - [WF] REAL_GOT_MONEY 0.95
+2014-08-01 11:33:30,740 - [startDB](SimpleWorkflow:76) - [WF] MONEY_TRANSFER_DAY_LIMIT 1000000
+2014-08-01 11:33:30,740 - [startDB](SimpleWorkflow:77) - [WF] MONEY_TRANSFER_TAX 10
+2014-08-01 11:33:32,336 - [start](MemcacheClientPool:51) - Memcache is already started.
+2014-08-01 11:33:35,650 - [<init>](SimpleWorkflow:60) - [WF] 5. Load zones...
+2014-08-01 11:33:35,653 - [initZones](ZoneManager:44) - [ZONES] From file = conf/zones-config.xml
+2014-08-01 11:33:35,745 - [start](SimpleWorkflow:128) - [WF] 6. Create session manager with sessiontimeout = 60000
+2014-08-01 11:33:35,746 - [<init>](SessionManager:37) - mSessionTimeout : 60000
+2014-08-01 11:33:35,747 - [start](SimpleWorkflow:132) - [WF] 7. end. Server started with name = com.tv.xeeng.server.socket.SocketServer
+2014-08-01 11:33:35,747 - [start](SimpleWorkflow:133) - Port = 6868
+2014-08-01 11:33:35,747 - [start](SimpleWorkflow:134) - ConnectTimeout (ms) = 60000
+2014-08-01 11:33:35,747 - [start](SimpleWorkflow:135) - ReceiveBufferSize (bytes) = 10485760
+2014-08-01 11:33:35,747 - [start](SimpleWorkflow:136) - ReuseAddress = true
+2014-08-01 11:33:35,748 - [start](SimpleWorkflow:137) - TcpNoDelay = true

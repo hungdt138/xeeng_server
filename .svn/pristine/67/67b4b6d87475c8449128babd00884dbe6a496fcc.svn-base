@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<zones>
+    <zone id="1" name="Bacay" capacity="12" players="12"></zone>
+
+    <zone id="3" name="Ai La Trieu Phu" capacity="4" players="4"></zone>
+	
+    <zone id="4" name="Phom" capacity="12" players="12"></zone>	
+	
+    <zone id="5" name="Tien len mien nam" capacity="12" players="12"></zone>
+
+    <zone id="11" name="Bacay" capacity="12" players="12"></zone>
+
+    <zone id="12" name="bautomcuaca" capacity="12" players="12"></zone>
+
+    <zone id="31" name="Picachu" capacity="4" players="4"></zone>
+
+    <zone id="37" name="Sam" capacity="4" players="4"></zone>
+
+    <zone id="40" name="Poker" capacity="9" players="9"></zone>
+
+</zones>

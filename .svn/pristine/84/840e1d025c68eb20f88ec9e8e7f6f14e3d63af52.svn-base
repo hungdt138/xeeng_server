@@ -1,0 +1,147 @@
+package com.tv.xeeng.base.data;
+
+import com.tv.xeeng.base.common.LoggerContext;
+import com.tv.xeeng.base.common.ServerException;
+import com.tv.xeeng.base.protocol.messages.UseCardRequest;
+import com.tv.xeeng.base.protocol.messages.UseCardResponse;
+import com.tv.xeeng.base.session.ISession;
+import com.tv.xeeng.databaseDriven.UserDB;
+import com.tv.xeeng.game.data.AIOConstants;
+import com.tv.xeeng.game.data.QueueUserEntity;
+import com.tv.xeeng.game.data.ResponseCode;
+import com.tv.xeeng.game.data.UserEntity;
+import com.tv.xeeng.memcached.data.CacheUserInfo;
+import com.tv.xeeng.service.cardservice.CardServicePortTypeProxy;
+import java.rmi.RemoteException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import org.quartz.Job;
+import org.quartz.JobExecutionContext;
+import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+
+/**
+ *
+ * @author tuanda
+ */
+public class VMGQueue implements Job {
+
+    private static ConcurrentHashMap<UUID, QueueUserEntity> usrQueue = new ConcurrentHashMap<UUID, QueueUserEntity>();
+    private static Logger log = LoggerContext.getLoggerFactory()
+            .getLogger(VMGQueue.class);
+    private static boolean isInProgress = false;
+    private static SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy hh:mm:ss");
+    private static final String PASSWORD_MANUAL = "abaceadsfsdfljiokjkladfdslkfdd";
+
+    public void insertUser(QueueUserEntity entity) {
+        try {
+            UUID uuid = UUID.randomUUID();
+            usrQueue.put(uuid, entity);
+        } catch (Exception ex) {
+            log.error(ex.getMessage(), ex);
+        }
+    }
+
+    @Override
+    public void execute(JobExecutionContext jec) throws JobExecutionException {
+
+        if (!isInProgress) {
+            isInProgress = true;
+
+            try {
+                Enumeration<UUID> e = usrQueue.keys();
+                while (e.hasMoreElements()) {
+                    try {
+                        QueueUserEntity queryEntity = null;
+                        UUID key = e.nextElement();
+                        queryEntity = usrQueue.get(key);
+                        usrQueue.remove(key);
+
+                        if (queryEntity == null) {
+                            continue;
+                        }
+
+                        ISession aSession = queryEntity.getSession();
+                        if (aSession == null || aSession.isExpired()) {
+                            continue;
+                        }
+
+                        if (queryEntity.getResponse() instanceof UseCardResponse) {
+                            UseCardRequest cardRq = (UseCardRequest) queryEntity.getRequest();
+                            UseCardResponse cardRes = (UseCardResponse) queryEntity.getResponse();
+                            cardRes.setResponse(ResponseCode.FAILURE, AIOConstants.DEFAULT_ERROR_CARD);
+                            try {
+                                CardServicePortTypeProxy proxy = new CardServicePortTypeProxy();
+
+                                String serviceId = cardRq.serviceId;
+                                String userName = aSession.getUserName();
+                                String cardId = cardRq.cardId;
+                                String cardCode = cardRq.cardCode;
+
+                                String txnTime = format.format(new Date());
+                                CacheUserInfo cache = new CacheUserInfo();
+                                UserEntity usrEntity = cache.getUserInfo(aSession.getUID());
+                                String partnerId = Integer.toString(usrEntity.partnerId);
+                                String refCode = cardRq.refCode;
+
+                                long userId = aSession.getUID();
+
+                                String sig = userName + serviceId + cardCode + cardId + txnTime;
+                                try {
+                                    String response = proxy.cardRefCodeService(partnerId, PASSWORD_MANUAL, userId, refCode, userName, cardId, serviceId,
+                                            cardCode, txnTime, sig);
+                                    cardRes.message = response;
+                                    cardRes.mCode = ResponseCode.SUCCESS;
+
+                                    /* Update cache */
+                                    if (cardRes.message.contains("Thong tin ma the khong chinh xac")) {
+                                        cardRes.message = cardRes.message.replace("Thong tin ma the khong chinh xac", " Thông tin mã thẻ không chính xác");
+                                    }
+                                    else if (cardRes.message.contains("The khong ton tai")) {
+                                        cardRes.message = cardRes.message.replace("The khong ton tai", "Thẻ không tồn tại");
+                                    }
+                                    else if (cardRes.message.contains("The da duoc su dung")) {
+                                        cardRes.message = cardRes.message.replace("The da duoc su dung", "Thẻ đã được sử dụng");
+                                    }
+                                    else if (cardRes.message.contains("Du lieu nhap vao co ky tu dac biet")) {
+                                        cardRes.message = cardRes.message.replace("Du lieu nhap vao co ky tu dac biet", "Dữ liệu nhập vào có ký tự đặc biệt");
+                                    }
+                                    
+                                    if (cardRes.message.contains("Ban da nap thanh cong")) {
+                                        UserDB userDB = new UserDB();
+                                        UserEntity user = userDB.getUserInfo(aSession.getUID());
+                                        cache.updateCacheUserInfo(user);
+                                        
+                                        cardRes.message = cardRes.message.replace("Ban da nap thanh cong", "Bạn đã nạp thành công");
+                                        cardRes.message = cardRes.message.replace("xeng", "Xèng");
+                                    }
+                                    /* Update cache */
+
+                                } catch (RemoteException ex) {
+                                    log.error(ex.getMessage(), ex);
+
+                                }
+                            } catch (Exception ex) {
+                                log.error(ex.getMessage(), ex);
+                            }
+
+                            aSession.write(cardRes);
+                        }
+
+                    } catch (ServerException ex) {
+                        log.error(ex.getMessage(), ex);
+                    } catch (Exception ex) {
+                        log.error(ex.getMessage(), ex);
+                    }
+
+                }
+            } catch (Exception ex) {
+                log.error(ex.getMessage(), ex);
+            }
+        }
+        isInProgress = false;
+    }
+}

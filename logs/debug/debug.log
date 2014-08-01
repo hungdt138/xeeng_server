@@ -1,0 +1,3 @@
+2014-08-01 11:33:31,041 - [getConnection](DBPoolConnection:80) - idleConnection = 0 => create new DataSource
+2014-08-01 11:33:35,744 - [serverStarted](SimpleWorkflow:334) - [WF] Server Started
+2014-08-01 11:49:08,544 - [batCai](SamTable:523) - Sai ne!

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="null" threshold="null">
+
+  <appender class="org.apache.log4j.ConsoleAppender" name="STDOUT">
+    <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{ISO8601} - [%M](%C{1}:%L) - %m%n"/>
+    </layout>
+  </appender>
+
+  <appender class="org.apache.log4j.RollingFileAppender" name="DEBUG">
+     <param name="File" value="logs/debug/debug.log"/>
+     <param name="Append" value="true"/>
+     <param name="MaxFileSize" value="10MB"/>
+     <param name="MaxBackupIndex" value="100"/>
+    <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{ISO8601} - [%M](%C{1}:%L) - %m%n"/>
+    </layout>
+    
+    <filter class="org.apache.log4j.varia.LevelMatchFilter">
+      <param name="LevelToMatch" value="DEBUG"/>
+      <param name="AcceptOnMatch" value="true"/>
+    </filter>
+    <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+  </appender>
+
+  <appender class="org.apache.log4j.DailyRollingFileAppender" name="INFO">
+     <param name="File" value="logs/infog/info.log"/>
+     <param name="Append" value="true"/>
+     
+    <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{ISO8601} - [%M](%C{1}:%L) - %m%n"/>
+    </layout>
+    
+    <filter class="org.apache.log4j.varia.LevelMatchFilter">
+      <param name="LevelToMatch" value="INFO"/>
+      <param name="AcceptOnMatch" value="true"/>
+    </filter>
+    <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+  </appender>
+
+  <appender class="org.apache.log4j.DailyRollingFileAppender" name="WARN">
+     <param name="File" value="logs/warn/warn.log"/>
+     <param name="Append" value="true"/>
+     
+    <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{ISO8601} - [%M](%C{1}:%L) - %m%n"/>
+    </layout>
+    
+    <filter class="org.apache.log4j.varia.LevelMatchFilter">
+      <param name="LevelToMatch" value="WARN"/>
+      <param name="AcceptOnMatch" value="true"/>
+    </filter>
+    <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+  </appender>
+
+  <appender class="org.apache.log4j.DailyRollingFileAppender" name="ERROR">
+     <param name="File" value="logs/error/error.log"/>
+     <param name="Append" value="true"/>
+    <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{ISO8601} - [%M](%C{1}:%L) - %m%n"/>
+    </layout>
+    
+    <filter class="org.apache.log4j.varia.LevelMatchFilter">
+      <param name="LevelToMatch" value="ERROR"/>
+      <param name="AcceptOnMatch" value="true"/>
+    </filter>
+    <filter class="org.apache.log4j.varia.DenyAllFilter"/>
+  </appender>
+  
+  
+    <!-- ================ -->  
+   <!-- Limit categories -->  
+   <!-- ================ -->  
+   
+  
+   <!-- Quartz  -->  
+   <category name="org.quartz" additivity="false">  
+       <priority value="ERROR" />  
+       <appender-ref ref="ERROR"/>  
+       
+   </category>  
+   
+   <category name="com.mchange" additivity="false"> 
+    <priority value="ERROR"/> 
+    <appender-ref ref="ERROR"/> 
+   </category>  
+   
+   
+  <root>
+    <priority value="DEBUG"/>
+    
+    <appender-ref ref="DEBUG"/>
+    <appender-ref ref="INFO"/>
+    <appender-ref ref="WARN"/>
+    <appender-ref ref="ERROR"/>
+  <appender-ref ref="STDOUT"/></root>
+
+</log4j:configuration>

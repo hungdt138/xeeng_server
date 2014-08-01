@@ -1,0 +1,11 @@
+initialPoolSize = 20
+maxIdleTime = 300000
+maxPoolSize = 40
+minPoolSize = 20
+acquireIncrement=5
+driverClass=com.microsoft.sqlserver.jdbc.SQLServerDriver
+jdbcUrl = jdbc:sqlserver://192.168.50.108:1433;DatabaseName=xeeng;
+user = xeeng
+password = gamexeeng
+memcachedServer = localhost
+cardServiceHttpSoap11EndpointAddress = http://192.168.95.252:9000/axis2/services/CardService.CardServiceHttpSoap11Endpoint/

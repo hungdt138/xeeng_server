@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.3
+Created-By: 1.7.0_09-b05 (Oracle Corporation)
+Class-Path: lib/activation.jar lib/axis.jar lib/bcprov-jdk16-146.jar l
+ ib/c3p0-0.9.1.2.jar lib/cldcapi11.jar lib/commons-cli.jar lib/commons
+ -codec-1.5.jar lib/commons-discovery-0.2.jar lib/commons-lang-2.6.jar
+  lib/commons-logging-api-1.1.jar lib/iLm.jar lib/javax.wsdl_1.6.2.v20
+ 1005080631.jar lib/jaxrpc.jar lib/jboss-common-4.0.2.jar lib/json-200
+ 70829.jar lib/log4j-1.2.12.jar lib/mLm.jar lib/midpapi21.jar lib/mysq
+ l-connector-java-5.1.6-bin.jar lib/org.apache.commons.logging_1.0.4.v
+ 201005080501.jar lib/org.osgi-3.0.0.jar lib/osgi-3.5.0.jar lib/primro
+ se.jar lib/protobuf-java-2.2.0.jar lib/quartz-all-2.0.2.jar lib/sL1.j
+ ar lib/servlet-api.jar lib/slf4j-api-1.5.10.jar lib/slf4j-log4j12-1.5
+ .10.jar lib/sqljdbc4.jar lib/wsdl4j-1.5.1.jar lib/imgscalr-lib-4.2.ja
+ r lib/nL2.jar
+X-COMMENT: Main-Class will be added automatically by build
+Main-Class: com.tv.xeeng.server.Server
+

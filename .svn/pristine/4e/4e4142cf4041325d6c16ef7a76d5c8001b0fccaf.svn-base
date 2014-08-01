@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<workflow>
+	<appname>xeeng</appname>
+    <business>
+        <properties>
+            <factory>com.tv.xeeng.base.business.SimpleBusinessPropertiesFactory</factory>
+        </properties>
+    </business>
+    <realGotMoney>0.95</realGotMoney>
+    <moneyTransferDayLimit>1000000</moneyTransferDayLimit>
+    <moneyTransferTax>10</moneyTransferTax>
+    <loadQuestion>true</loadQuestion>
+    <useCached>true</useCached>
+    
+    <server>
+        <name>com.tv.xeeng.server.socket.SocketServer</name>
+        <port>6868</port>
+		<connecttimeout>60000</connecttimeout>
+		<sessiontimeout>60000</sessiontimeout>
+		<receivebuffersize>10485760</receivebuffersize>
+		<reuseaddress>true</reuseaddress>
+		<tcpnodelay>true</tcpnodelay>
+    </server>
+
+</workflow>
